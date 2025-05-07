@@ -1,33 +1,11 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
-
-// react-router-dom components
 import { Link } from "react-router-dom";
+import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
-import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-
-// @mui icons
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -43,8 +21,21 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
-
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Invalid email address").required("Required"),
+    password: Yup.string().required("Required"),
+  });
+
+  const onSubmit = async (values) => {
+    console.log("Login form data", values);
+  };
 
   return (
     <BasicLayout image={bgImage}>
@@ -63,66 +54,81 @@ function Basic() {
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign in
           </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-          </Grid>
         </MDBox>
-        <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
-            <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
-            </MDBox>
-            <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
-            </MDBox>
-            <MDBox display="flex" alignItems="center" ml={-1}>
-              <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-              <MDTypography
-                variant="button"
-                fontWeight="regular"
-                color="text"
-                onClick={handleSetRememberMe}
-                sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
-              >
-                &nbsp;&nbsp;Remember me
-              </MDTypography>
-            </MDBox>
-            <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
-                sign in
-              </MDButton>
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
-              <MDTypography variant="button" color="text">
-                Don&apos;t have an account?{" "}
-                <MDTypography
-                  component={Link}
-                  to="/authentication/sign-up"
-                  variant="button"
-                  color="info"
-                  fontWeight="medium"
-                  textGradient
-                >
-                  Sign up
-                </MDTypography>
-              </MDTypography>
-            </MDBox>
-          </MDBox>
-        </MDBox>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              <MDBox pt={4} pb={3} px={3}>
+                <MDBox mb={2}>
+                  <Field
+                    name="email"
+                    as={MDInput}
+                    type="email"
+                    label="Email"
+                    fullWidth
+                    error={touched.email && Boolean(errors.email)}
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    style={{ color: "red", fontSize: 12 }}
+                  />
+                </MDBox>
+                <MDBox mb={2}>
+                  <Field
+                    name="password"
+                    as={MDInput}
+                    type="password"
+                    label="Password"
+                    fullWidth
+                    error={touched.password && Boolean(errors.password)}
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    style={{ color: "red", fontSize: 12 }}
+                  />
+                </MDBox>
+                <MDBox display="flex" alignItems="center" ml={-1}>
+                  <Switch checked={rememberMe} onChange={handleSetRememberMe} />
+                  <MDTypography
+                    variant="button"
+                    fontWeight="regular"
+                    color="text"
+                    onClick={handleSetRememberMe}
+                    sx={{ cursor: "pointer", userSelect: "none", ml: -1 }}
+                  >
+                    &nbsp;&nbsp;Remember me
+                  </MDTypography>
+                </MDBox>
+                <MDBox mt={4} mb={1}>
+                  <MDButton variant="gradient" color="info" fullWidth type="submit">
+                    Sign in
+                  </MDButton>
+                </MDBox>
+                <MDBox mt={3} mb={1} textAlign="center">
+                  <MDTypography variant="button" color="text">
+                    Don&apos;t have an account?{" "}
+                    <MDTypography
+                      component={Link}
+                      to="/authentication/sign-up"
+                      variant="button"
+                      color="info"
+                      fontWeight="medium"
+                      textGradient
+                    >
+                      Sign up
+                    </MDTypography>
+                  </MDTypography>
+                </MDBox>
+              </MDBox>
+            </Form>
+          )}
+        </Formik>
       </Card>
     </BasicLayout>
   );
