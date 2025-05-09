@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Box, Button, Grid, Snackbar, Typography, Alert, AlertTitle } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-// import FormikTextfield from "./components/FormikTextfield";
+import MDButton from "components/MDButton";
+import FormikTextfield from "./components/FormikTextfield";
 // import FormikDatePicker from "./components/FormikDatePicker";
 // import FormikSelect from "./components/FormikSelect";
 
@@ -42,12 +43,12 @@ export default function BookingForm() {
   return (
     <Box sx={{ maxWidth: 600, mx: "auto", mt: 4 }}>
       <Typography variant="h5" gutterBottom>
-        Room Booking Form
+        Hall Booking Form
       </Typography>
 
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         <Form>
-          {/* <Grid container spacing={2}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormikTextfield name="name" label="Name" required />
             </Grid>
@@ -60,17 +61,17 @@ export default function BookingForm() {
             <Grid item xs={12}>
               <FormikTextfield name="purpose" label="Purpose" multiline rows={3} required />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <FormikDatePicker name="date" label="Date" required />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} sm={6}>
               <FormikSelect name="timeSlot" label="Time Slot" options={timeSlots} required />
-            </Grid>
-          </Grid> */}
+            </Grid> */}
+          </Grid>
 
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
+          <MDButton type="submit" color="info" fullWidth variant="contained" sx={{ mt: 3 }}>
             Submit Booking
-          </Button>
+          </MDButton>
         </Form>
       </Formik>
 
